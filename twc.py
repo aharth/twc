@@ -23,7 +23,13 @@ for pname in zip.namelist():
     pfile = zip.open(pname)
     pstring = get_paper(pfile)
     # remove mentions of The Web Conference 2022
+    pstring = pstring.replace('\r', ' ').replace('\n', ' ')
     pstring = pstring.replace("The Web Conference 2022", "")
     ptokens = tokenise(remove_punct(pstring))
-    print(pname, "mention of the term 'web':", ptokens.count("web"))
+    count = ptokens.count("web")
+    print(pname, "mention of the term 'web':", count)
+    if (count == 1):
+        index = ptokens.index("web")
+        print ("Single mention:", ptokens[index-5:index+5])
 
+    
