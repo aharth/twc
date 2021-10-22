@@ -32,6 +32,7 @@ for i in range(index, len(sys.argv)):
         # remove mentions of The Web Conference 2022
         pstring = pstring.replace('\r', ' ').replace('\n', ' ')
         pstring = pstring.replace("The Web Conference 2022", "")
+        pstring = pstring.replace("2022 World Wide Web Conference", "")
         ptokens = tokenise(remove_punct(pstring))
         count = ptokens.count("web")
         print(pname, "mention of the term 'web':", count)
