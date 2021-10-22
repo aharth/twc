@@ -8,4 +8,10 @@ The check includes the references of the papers, i.e., with zero hits the papers
 
 ## Usage
 
-````$ python3 twc.py {ZIP archive}````
+Simple mode:
+
+````$ python3 twc.py {ZIP archives}````
+
+or verbose mode to print surrounding words of the mention:
+
+````$ python3 twc.py -v {ZIP archives}````

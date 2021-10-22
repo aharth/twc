@@ -18,18 +18,25 @@ import sys
 import zipfile
 import os
 
-zip = zipfile.ZipFile(sys.argv[1])
-for pname in zip.namelist():
-    pfile = zip.open(pname)
-    pstring = get_paper(pfile)
-    # remove mentions of The Web Conference 2022
-    pstring = pstring.replace('\r', ' ').replace('\n', ' ')
-    pstring = pstring.replace("The Web Conference 2022", "")
-    ptokens = tokenise(remove_punct(pstring))
-    count = ptokens.count("web")
-    print(pname, "mention of the term 'web':", count)
-    if (count == 1):
-        index = ptokens.index("web")
-        print ("Single mention:", ptokens[index-5:index+5])
+index = 1
+verbose = False
+if sys.argv[1] == "-v":
+    verbose = True
+    index = 2
+
+for i in range(index, len(sys.argv)):
+    zip = zipfile.ZipFile(sys.argv[i])
+    for pname in zip.namelist():
+        pfile = zip.open(pname)
+        pstring = get_paper(pfile)
+        # remove mentions of The Web Conference 2022
+        pstring = pstring.replace('\r', ' ').replace('\n', ' ')
+        pstring = pstring.replace("The Web Conference 2022", "")
+        ptokens = tokenise(remove_punct(pstring))
+        count = ptokens.count("web")
+        print(pname, "mention of the term 'web':", count)
+        if (count == 1 and verbose):
+            index = ptokens.index("web")
+            print ("Single mention:", ptokens[index-5:index+5])
 
     
