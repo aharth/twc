@@ -18,6 +18,10 @@ import sys
 import zipfile
 import os
 
+if len(sys.argv) <= 1:
+    print("Usage: twc.py [-v] archive1.zip archive2.zip ...")
+    sys.exit(1)
+
 index = 1
 verbose = False
 if sys.argv[1] == "-v":
