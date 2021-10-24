@@ -17,6 +17,7 @@ def tokenise(text):
 import sys
 import zipfile
 import os
+from collections import Counter
 
 if len(sys.argv) <= 1:
     print("Usage: twc.py [-v] archive1.zip archive2.zip ...")
@@ -28,9 +29,13 @@ if sys.argv[1] == "-v":
     verbose = True
     index = 2
 
+counter = Counter()
+papers = 0
+
 for i in range(index, len(sys.argv)):
     with zipfile.ZipFile(sys.argv[i]) as zip:
         for pname in zip.namelist():
+            papers = papers+1
             with zip.open(pname) as pfile:
                 try:
                     pstring = get_paper(pfile)
@@ -41,10 +46,12 @@ for i in range(index, len(sys.argv)):
                     ptokens = tokenise(remove_punct(pstring))
                     count = ptokens.count("web")
                     print(pname, "mention of the term 'web':", count)
+                    counter[count] = counter[count]+1
                     if (count == 1 and verbose):
                         index = ptokens.index("web")
                         print ("Single mention:", ptokens[index-5:index+5])
                 except:
                     print("Error accessing", pname)
 
-    
+print(counter.most_common())
+print("Of", papers, "papers, ", counter[0], "do not mention 'web' at all, ", counter[1], " once and ", counter[2], "twice")
