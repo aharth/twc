@@ -42,7 +42,7 @@ for i in range(index, len(sys.argv)):
                     pstring = get_paper(pfile)
                     # remove newlines
                     pstring = pstring.replace('\r', ' ').replace('\n', ' ')
-                    # remove mentions of The Web Conference 2022
+                    # remove mentions of The Web Conference 2022 in different variations
                     pstring = pstring.replace("Web Conference 2022", "")
                     pstring = pstring.replace("The Web Conference, Apr 25–29, 2022", "")
                     pstring = pstring.replace("2022 World Wide Web Conference", "")
@@ -50,15 +50,12 @@ for i in range(index, len(sys.argv)):
                     pstring = pstring.replace("The WebConf, Lyon, France", "")
                     pstring = re.sub(r'[wW][wW][wW]..?22', '', pstring)
                     pstring = re.sub(r'[wW][wW][wW]..?.?.?.?22', '', pstring)
-#                    pstring = pstring.replace("WWW’ 22", "")
-#                    pstring = pstring.replace("WWW ’22", "")
-#                    pstring = pstring.replace("www ’22", "")
-#                    pstring = pstring.replace("WWW 2022", "")
-#                    pstring = pstring.replace("WWW ’2022", "")
                     pstring = pstring.replace("WWW, FR", "")
                     pstring = pstring.replace("WWW, April 25–29, 2022, Lyon, France", "")
                     # remove URIs (to exclude http://www.)
                     pstring = re.sub(r'http\S+', '', pstring)
+                    # remove URIs without HTTP but starting with www. - not sure that is needed
+#                    pstring = re.sub(r'www\.\S+', '', pstring)
 
                     # lowercase, tokenise, remove punctuation
                     ptokens = tokenise(remove_punct(pstring))
@@ -67,16 +64,12 @@ for i in range(index, len(sys.argv)):
                     count = count + ptokens.count("web")
                     count = count + ptokens.count("www")
 
-#                    if (ptokens.count("web") and verbose):
-#                        index = ptokens.index("web")
-#                        print ("Single mention 'web':", ptokens[index-5:index+5])
-
-#                    if (ptokens.count("www") and verbose):
-#                        index = ptokens.index("www")
-#                        print ("Single mention 'www':", ptokens[index-5:index+5])
-
                     if (verbose):
                         print(pname, "mention of the term 'web' or 'www':", count)
+                        indices = [i for i, x in enumerate(ptokens) if x == "web" or x == "www"]
+                        print(indices)
+                        for i in indices:
+                            print(ptokens[i-5:i+5])
 
                     id = pname.replace("TheWebConf_2022_paper_", "")
                     id = id.replace(".pdf", "")
